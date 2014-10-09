@@ -1883,33 +1883,34 @@ unsigned int SOIL_direct_load_DDS(
 
 int query_NPOT_capability( void )
 {
-	/*	check for the capability	*/
-	if( has_NPOT_capability == SOIL_CAPABILITY_UNKNOWN )
+	if (has_NPOT_capability == SOIL_CAPABILITY_UNKNOWN) {
+		if (SOIL_is_ext_available("GL_ARB_texture_non_power_of_two") == 1) {
+			has_NPOT_capability = SOIL_CAPABILITY_PRESENT;
+		}
+		else {
+			has_NPOT_capability = SOIL_CAPABILITY_NONE;
+		}
+	}
+	/*if( has_NPOT_capability == SOIL_CAPABILITY_UNKNOWN )
 	{
-		/*	we haven't yet checked for the capability, do so	*/
 		if(
 			(NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
 				"GL_ARB_texture_non_power_of_two" ) )
 			)
 		{
-			/*	not there, flag the failure	*/
 			has_NPOT_capability = SOIL_CAPABILITY_NONE;
 		} else
 		{
-			/*	it's there!	*/
 			has_NPOT_capability = SOIL_CAPABILITY_PRESENT;
 		}
-	}
-	/*	let the user know if we can do non-power-of-two textures or not	*/
+	}*/
 	return has_NPOT_capability;
 }
 
 int query_tex_rectangle_capability( void )
 {
-	/*	check for the capability	*/
-	if( has_tex_rectangle_capability == SOIL_CAPABILITY_UNKNOWN )
+	/*if( has_tex_rectangle_capability == SOIL_CAPABILITY_UNKNOWN )
 	{
-		/*	we haven't yet checked for the capability, do so	*/
 		if(
 			(NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
 				"GL_ARB_texture_rectangle" ) )
@@ -1921,15 +1922,21 @@ int query_tex_rectangle_capability( void )
 				"GL_NV_texture_rectangle" ) )
 			)
 		{
-			/*	not there, flag the failure	*/
 			has_tex_rectangle_capability = SOIL_CAPABILITY_NONE;
 		} else
 		{
-			/*	it's there!	*/
 			has_tex_rectangle_capability = SOIL_CAPABILITY_PRESENT;
 		}
+	}*/
+
+	if (has_tex_rectangle_capability == SOIL_CAPABILITY_UNKNOWN) {
+		if (SOIL_is_ext_available("GL_ARB_texture_rectangle") == 1 || SOIL_is_ext_available("GL_EXT_texture_rectangle") == 1 || SOIL_is_ext_available("GL_NV_texture_rectangle")) {
+			has_tex_rectangle_capability = SOIL_CAPABILITY_PRESENT;
+		}
+		else {
+			has_tex_rectangle_capability = SOIL_CAPABILITY_NONE;
+		}
 	}
-	/*	let the user know if we can do texture rectangles or not	*/
 	return has_tex_rectangle_capability;
 }
 
@@ -1953,14 +1960,11 @@ int query_DXT_capability( void )
 	/*	check for the capability	*/
 	if( has_DXT_capability == SOIL_CAPABILITY_UNKNOWN )
 	{
-		/*	we haven't yet checked for the capability, do so	*/
-		if( NULL == strstr(
-				(char const*)glGetString( GL_EXTENSIONS ),
-				"GL_EXT_texture_compression_s3tc" ) )
-		{
-			/*	not there, flag the failure	*/
+		if (SOIL_is_ext_available("GL_EXT_texture_compression_s3tc") == 0) {
+			/*not there*/
 			has_DXT_capability = SOIL_CAPABILITY_NONE;
-		} else
+		}
+		 else
 		{
 			/*	and find the address of the extension function	*/
 			P_SOIL_GLCOMPRESSEDTEXIMAGE2DPROC ext_addr = NULL;

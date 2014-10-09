@@ -20,6 +20,7 @@
 	#include <windows.h>
 	#include <wingdi.h>
 	#include <GL/glew.h>
+	#include <gl/GL.h>
 #elif defined(__APPLE__) || defined(__APPLE_CC__)
 	/*	I can't test this Apple stuff!	*/
 	#include <OpenGL/gl.h>
@@ -1930,7 +1931,7 @@ int query_tex_rectangle_capability( void )
 	}*/
 
 	if (has_tex_rectangle_capability == SOIL_CAPABILITY_UNKNOWN) {
-		if (SOIL_is_ext_available("GL_ARB_texture_rectangle") == 1 || SOIL_is_ext_available("GL_EXT_texture_rectangle") == 1 || SOIL_is_ext_available("GL_NV_texture_rectangle")) {
+		if ((SOIL_is_ext_available("GL_ARB_texture_rectangle") == 1) || (SOIL_is_ext_available("GL_EXT_texture_rectangle") == 1) || (SOIL_is_ext_available("GL_NV_texture_rectangle"))) {
 			has_tex_rectangle_capability = SOIL_CAPABILITY_PRESENT;
 		}
 		else {
@@ -1944,7 +1945,7 @@ int query_cubemap_capability( void )
 {
 	/*	check for the capability	*/
 	if (has_cubemap_capability == SOIL_CAPABILITY_UNKNOWN) {
-		if (SOIL_is_ext_available("GL_ARB_texture_cube_map") == 1 || SOIL_is_ext_available("GL_EXT_texture_cube_map") == 1) {
+		if ((SOIL_is_ext_available("GL_ARB_texture_cube_map") == 1) || (SOIL_is_ext_available("GL_EXT_texture_cube_map") == 1)) {
 			has_cubemap_capability = SOIL_CAPABILITY_PRESENT;
 		}
 		else {
